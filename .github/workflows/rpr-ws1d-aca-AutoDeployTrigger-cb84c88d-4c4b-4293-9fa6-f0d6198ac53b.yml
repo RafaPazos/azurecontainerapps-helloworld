@@ -1,0 +1,45 @@
+name: Trigger auto deployment for rpr-ws1d-aca
+
+# When this action will be executed
+on:
+  # Automatically trigger it when detected changes in repo
+  push:
+    branches: 
+      [ main ]
+    paths:
+    - '//**'
+    - '.github/workflows/rpr-ws1d-aca-AutoDeployTrigger-cb84c88d-4c4b-4293-9fa6-f0d6198ac53b.yml'
+
+  # Allow mannually trigger 
+  workflow_dispatch:      
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions: 
+      id-token: write #This is required for requesting the OIDC JWT Token
+
+    steps:
+      - name: Checkout to the branch
+        uses: actions/checkout@v2
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.RPRWS1DACA_AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.RPRWS1DACA_AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.RPRWS1DACA_AZURE_SUBSCRIPTION_ID }}
+
+      - name: Build and push container image to registry
+        uses: azure/container-apps-deploy-action@v1
+        with:
+          appSourcePath: ${{ github.workspace }} 
+          registryUrl: rprws1dacaacr.azurecr.io
+          registryUsername: ${{ secrets.RPRWS1DACA_REGISTRY_USERNAME }}
+          registryPassword: ${{ secrets.RPRWS1DACA_REGISTRY_PASSWORD }}
+          containerAppName: rpr-ws1d-aca
+          resourceGroup: rpr-ws1d-aca-rg
+          imageToBuild: rprws1dacaacr.azurecr.io/rpr-ws1d-aca:${{ github.sha }}
+          dockerfilePath: Dockerfile
+
+
