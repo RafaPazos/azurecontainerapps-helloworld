@@ -34,9 +34,9 @@ jobs:
         uses: azure/container-apps-deploy-action@v1
         with:
           appSourcePath: ${{ github.workspace }} 
-          registryUrl: rprws1dacaacr.azurecr.io
-          registryUsername: ${{ secrets.RPRWS1DACA_REGISTRY_USERNAME }}
-          registryPassword: ${{ secrets.RPRWS1DACA_REGISTRY_PASSWORD }}
+          acrName: rprws1dacaacr
+          acrUsername: ${{ secrets.RPRWS1DACA_REGISTRY_USERNAME }}
+          acrPassword: ${{ secrets.RPRWS1DACA_REGISTRY_PASSWORD }}
           containerAppName: rpr-ws1d-aca
           resourceGroup: rpr-ws1d-aca-rg
           imageToBuild: rprws1dacaacr.azurecr.io/rpr-ws1d-aca:${{ github.sha }}
