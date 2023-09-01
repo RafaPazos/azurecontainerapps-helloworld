@@ -39,7 +39,7 @@ jobs:
           acrPassword: ${{ secrets.RPRWS1DACA_REGISTRY_PASSWORD }}
           containerAppName: rpr-ws1d-aca
           resourceGroup: rpr-ws1d-aca-rg
-          imageToBuild: rprws1dacaacr.azurecr.io/rpr-ws1d-aca:${{ github.sha }}
+          imageToBuild: rprws1dacaacr.azurecr.io/rpr-ws1d2-aca:${{ github.sha }}
           dockerfilePath: Dockerfile
 
 
